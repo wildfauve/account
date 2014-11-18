@@ -1,0 +1,15 @@
+oauth:
+  client_id: "inner_kiwi"
+  client_secret: "TYWVUbkaujh0nFxDG-oE3A"
+  id_token_secret: "id_token_secret"
+  id_service_url: "http://localhost:3013/authorise"
+  id_token_service_url: "http://localhost:3013/token"
+  id_logout_service_url: "http://localhost:3013/logout"  
+  id_userinfo_service_url: "http://localhost:3013/userinfo"  
+services:
+  self:
+    host: "http://localhost:3023"
+  customers:
+    index: "http://localhost:3021/api/customers"
+    show: "http://localhost:3021/api/customers/{id}"
+    create: "http://localhost:3021/api/customers"    

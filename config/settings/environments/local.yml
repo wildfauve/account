@@ -1,0 +1,8 @@
+oauth:
+  client_id: "inner_kiwi"
+  client_secret: ""
+  id_token_secret: "id_token_secret"
+  id_service_url: "id.local:8010/authorise"
+  id_token_service_url: "id.local:8013/token"
+  id_logout_service_url: "id.local:8013/logout"  
+  id_userinfo_service_url: "id.local:8013/userinfo"  
