@@ -30,6 +30,7 @@ class TransactionAccount
       self.update_attrs(account)
       publish(:successful_add_event, self)
     else
+      logger.debug "create_account Account Already Open"
       publish(:account_already_open_event, self)
     end
   end 
@@ -49,10 +50,11 @@ class TransactionAccount
   
   def provide_account_summary(options: nil)
     if !options[:id_token]
-              binding.pry
-      publish(:invalid_summary_event, options.except!(:id_token)) if !options[:id_token]
+      logger.debug "provide_account_summary no ID TOKEN"
+      publish(:invalid_summary_event, options)
     else
       if self.class.token_validate_and_extract_claim(id_token: options[:id_token])["link"] != self.party_url
+        logger.debug "provide_account_summary ID Token doesnt match party URL"
         publish(:invalid_summary_event, options.except!(:id_token))
       else
         publish(:successful_summary_event, self, options.except!(:id_token))
@@ -62,6 +64,7 @@ class TransactionAccount
   
   def process_transaction(params: nil, bus_op: nil)
      if self.class.token_validate_and_extract_claim(id_token: params[:id_token])["link"] != self.party_url
+       logger.debug "process_transaction ID Token doesnt match party URL"
        publish(:invalid_transaction_event, self)
      else
        txn = Transaction.add(amount: params[:amount], bus_op: bus_op, desc: params[:desc])

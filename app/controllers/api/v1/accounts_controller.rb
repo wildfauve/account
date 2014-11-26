@@ -21,7 +21,7 @@ class Api::V1::AccountsController < Api::ApplicationController
     @account = TransactionAccount.find(params[:id])
     if params[:reset].present?
       @account.transactions.delete_all
-      @accounts.delete_all
+      @account.delete
     end
     render status: :ok
   end
@@ -29,11 +29,19 @@ class Api::V1::AccountsController < Api::ApplicationController
   def successful_summary_event(account, options)
     @account = account
     @options = options
+    respond_to do |f|
+      f.json
+      f.js
+    end
   end
   
   def invalid_summary_event(options)
     @options = options
     @error = true    
+    respond_to do |f|
+      f.json {render 'api/v1/shared/error', status: :unprocessable_entity, locals: {status: :unprocessable_entity, message: "Invalid Request"}} 
+      f.js
+    end
   end
   
   def successful_update_event()
@@ -45,7 +53,7 @@ class Api::V1::AccountsController < Api::ApplicationController
   end
 
   def account_already_open_event(ta)
-    render 'api/v1/shared/error', status: :unprocessable_entity, locals: {status: :unprocessable_entity, message: "account already open"}
+    render 'api/v1/shared/error', status: :unprocessable_entity, locals: {status: :account_already_open, message: "account already open"}
   end
   
   

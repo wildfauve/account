@@ -28,4 +28,8 @@ class EventHandler
     self.publish(exchange: "events", message: account.create_account_event)
   end
   
+  def self.successful_transaction_event(account, txn)
+    self.publish(exchange: "events", message: txn.txn_event)    
+  end
+  
 end
